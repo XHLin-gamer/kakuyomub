@@ -3,8 +3,8 @@ from requests import Session
 from bs4 import BeautifulSoup
 from PrettyPrint import PrettyPrintTree
 from episode import Episodes
+from downloader import Downloader
 
-import os
 import json
 import re
 
@@ -17,7 +17,7 @@ class chapter():
         self.level = level
         self.children: list = list()
         self.episodes: list[Episodes] = list()
-        
+        self.downloader = Downloader(self.episodes)
         self.work_id = work_id
         
         if json:
@@ -36,6 +36,8 @@ class chapter():
             episode_data = json[f"Episode:{episode_id}"]
             episode_title = episode_data['title']
             self.episodes.append(Episodes(self.work_id, episode_id, episode_title))
+            
+        self.downloader.download()
         print(len(self.episodes))
 
     def add_child(self, child):

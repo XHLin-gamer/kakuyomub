@@ -14,8 +14,24 @@ class Episodes():
         
         self._is_check = False
         
-        self.fetch_content()
-    
+        # self.fetch_content()
+    def set_content(self, raw_html_file):
+        
+        soup = BeautifulSoup(raw_html_file, features="lxml")
+        contentMain = soup.find('div', id = 'contentMain-inner')
+
+        self.content = [str(p) for p in contentMain.find_all('p')[1:]]
+        
+        env = jinja2.Environment()
+        with open('./src/template.html') as f:
+            template = env.from_string(f.read())
+        file = template.render(title = self.title, content = '\n'.join(self.content))
+        self.html_file = file
+        with open(f'./cache/{self.episode_id}.html','w', encoding='utf8') as f:
+            f.write(file)
+        
+        logger.info(f"Successfully fetched {self.title} => ./cache/{self.episode_id}.html")
+        
     def is_check(self):
         return self._is_check
         
