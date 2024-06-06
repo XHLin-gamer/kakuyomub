@@ -2,8 +2,8 @@ from loguru import logger
 from requests import Session
 from bs4 import BeautifulSoup
 from PrettyPrint import PrettyPrintTree
-from episode import Episodes
-from downloader import Downloader
+from .episode import Episodes
+from .downloader import Downloader
 
 import json
 import re

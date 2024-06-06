@@ -10,7 +10,13 @@ import argparse
 parser = argparse.ArgumentParser(description='カクヨム => Epub')
 parser.add_argument('work_id', help='the id of the work')
 
-def main(id):
+def main(id,path = None):
+    """download work to epub with id, and move the file to the path
+
+    Args:
+        id (str|int): the work id
+        path (str, optional): the target path. Defaults to None.
+    """
     w = Works(id)
 
     title = w.title
@@ -32,6 +38,8 @@ def main(id):
     maker.add_navi()
 
     maker.write_epub('.')
+    
+    
         
 if __name__ == "__main__":
     args = parser.parse_args()
