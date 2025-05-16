@@ -8,6 +8,11 @@ Usage:
 pip install -r requirement.txt
 python src\main.py WORK_ID
 ```
+or
+
+```bash
+pip install kakuyomub
+```
 replace the ```WORK_ID``` with the カクヨム work id
 
 
