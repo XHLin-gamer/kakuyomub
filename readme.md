@@ -12,6 +12,7 @@ or
 
 ```bash
 pip install kakuyomub
+>>> kakuyomub.download(16817330650993330082, "./")
 ```
 replace the ```WORK_ID``` with the カクヨム work id
 

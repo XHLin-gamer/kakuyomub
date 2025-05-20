@@ -27,6 +27,9 @@ class Episodes():
             template = env.from_string(f.read())
         file = template.render(title = self.title, content = '\n'.join(self.content))
         self.html_file = file
+        
+        if not os.path.exists('./cache/'): os.makedirs('./cache/')
+        
         with open(f'./cache/{self.episode_id}.html','w', encoding='utf8') as f:
             f.write(file)
         
