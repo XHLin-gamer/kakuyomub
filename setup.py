@@ -4,7 +4,7 @@ this_directory = Path(__file__).parent
 long_description = (this_directory / "README.md").read_text(encoding='utf-8')
 setup(
     name = "kakuyomub",      #这里是pip项目发布的名称
-    version = "0.1.4",  #版本号，数值大的会优先被pip
+    version = "0.2.0",  #版本号，数值大的会优先被pip
     keywords = ("kakuyomu", "epub"),
     description = "Convert kakuyomu articles to one epub file",
     long_description = long_description,
