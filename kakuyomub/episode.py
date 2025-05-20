@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 import requests
 import jinja2
 import os
+from pathlib import Path
+this_directory = Path(__file__).parent
 
 class Episodes():
     def __init__(self, work_id, episode_id, title = '') -> None:
@@ -23,7 +25,7 @@ class Episodes():
         self.content = [str(p) for p in contentMain.find_all('p')[1:]]
         
         env = jinja2.Environment()
-        with open('./src/template.html') as f:
+        with open(this_directory / 'template.html') as f:
             template = env.from_string(f.read())
         file = template.render(title = self.title, content = '\n'.join(self.content))
         self.html_file = file

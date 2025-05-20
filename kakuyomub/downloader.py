@@ -1,5 +1,5 @@
 import grequests
-from episode import Episodes
+from .episode import Episodes
 from loguru import logger
 
 class Downloader():

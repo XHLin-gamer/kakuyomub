@@ -1,1 +1,1 @@
-from src import main as doanload
+from kakuyomub import main as doanload
