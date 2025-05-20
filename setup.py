@@ -2,7 +2,7 @@ from setuptools import setup, find_packages            #这个包没有的可以
 
 setup(
     name = "kakuyomub",      #这里是pip项目发布的名称
-    version = "0.0.7",  #版本号，数值大的会优先被pip
+    version = "0.1.3",  #版本号，数值大的会优先被pip
     keywords = ("kakuyomu", "epub"),
     description = "Convert kakuyomu articles to one epub file",
     long_description = "Convert kakuyomu articles to one epub file",
