@@ -6,7 +6,7 @@ Usage:
 
 ```bash
 pip install -r requirement.txt
-python src\main.py WORK_ID
+python -m kakuyomub.main WORK_ID
 ```
 or
 
@@ -23,7 +23,7 @@ the url of 「クーデレなセフレと小悪魔な後輩が義妹になった
 The id of the work is the last trunk of the url, which is 16817330668128729529
 ```bash
 # use the id to download work
-python .\src\main.py 16817330668128729529
+python -m kakuyomub.main 16817330668128729529
 ```
 
 and the result is as:
