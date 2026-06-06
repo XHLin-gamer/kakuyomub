@@ -80,8 +80,9 @@ def parse_meta_json(_json: json) -> dict:
     res['tagLabels'] = word_data['tagLabels']
 
     # generate the chapter tree structure
+    toc_key = 'tableOfContentsV2' if 'tableOfContentsV2' in word_data else 'tableOfContents'
     chap_list = []
-    for table_dict in word_data['tableOfContents']: 
+    for table_dict in word_data[toc_key]:
         chap_list += [*table_dict.values()]
     
     # if there is no chapter tree structure, hint the flat structure
