@@ -80,8 +80,12 @@ def parse_meta_json(_json: json) -> dict:
     res['tagLabels'] = word_data['tagLabels']
 
     # generate the chapter tree structure
+    if 'tableOfContents' not in word_data:
+        logger.error(f"'tableOfContents' key not found. Available keys in Work data: {list(word_data.keys())}")
+        raise KeyError("tableOfContents")
+
     chap_list = []
-    for table_dict in word_data['tableOfContents']: 
+    for table_dict in word_data['tableOfContents']:
         chap_list += [*table_dict.values()]
     
     # if there is no chapter tree structure, hint the flat structure
