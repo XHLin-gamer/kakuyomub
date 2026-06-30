@@ -1,9 +1,9 @@
 from loguru import logger
+from .downloader import Downloader
+from .episode import Episodes
 from requests import Session
 from bs4 import BeautifulSoup
 from PrettyPrint import PrettyPrintTree
-from .episode import Episodes
-from .downloader import Downloader
 
 import json
 import re
@@ -11,7 +11,7 @@ import re
 
 
 class chapter():
-    def __init__(self,title, id, json = None, level = 0, work_id = None) -> None:
+    def __init__(self,title, id, json = None, level = 0, work_id = None, toc_key = None) -> None:
         self.title = title
         self.id = id
         self.level = level
@@ -19,17 +19,15 @@ class chapter():
         self.episodes: list[Episodes] = list()
         self.downloader = Downloader(self.episodes)
         self.work_id = work_id
+        self.toc_key = toc_key
         
         if json:
             self.json = json
             self.match_episode(self.json)
 
     def match_episode(self, json):
-        if self.level != 0:
-            key = f"TableOfContentsChapter:{self.id}"
-            episode_data = json[key]['episodeUnions']
-        else:
-            episode_data = json['TableOfContentsChapter:']['episodeUnions']
+        key = self.toc_key or f"TableOfContentsChapter:{self.id}"
+        episode_data = json[key].get('episodeUnions', [])
             
         for item in episode_data:
             episode_id = item['__ref'].split(':')[-1]
@@ -78,16 +76,16 @@ def parse_meta_json(_json: json) -> dict:
     res['catchphrase'] = word_data['catchphrase']
     res['introduction'] = word_data['introduction']
     res['tagLabels'] = word_data['tagLabels']
+    author_ref = word_data.get('author', {}).get('__ref')
+    res['author'] = data.get(author_ref, {}).get('activityName', '') if author_ref else ''
 
     # generate the chapter tree structure
-    chap_list = []
-    for table_dict in word_data['tableOfContents']: 
-        chap_list += [*table_dict.values()]
+    chap_list = _get_table_of_contents(word_data)
     
     # if there is no chapter tree structure, hint the flat structure
     if chap_list == ['TableOfContentsChapter:']: 
         logger.info('flat structure')
-        root = chapter(res['title'],work_id,  data, 0, work_id)
+        root = chapter(res['title'], work_id, data, 0, work_id, chap_list[0])
         return res, root
     else:
         root = chapter(res['title'],res['title'])
@@ -95,10 +93,12 @@ def parse_meta_json(_json: json) -> dict:
         
         # Build the content tree
         for idx, chap_id in enumerate(chap_list):
-            chap_j = data[chap_id[15:]]
+            toc_j = data[chap_id]
+            chapter_ref = toc_j.get('chapter', {}).get('__ref')
+            chap_j = data.get(chapter_ref, toc_j)
             level, title =  chap_j['level'], chap_j['title']
             _id = chap_j['id']
-            new = chapter(title, _id,data, level,work_id)
+            new = chapter(title, _id, data, level, work_id, chap_id)
             if stack[-1].level < level:  
                 stack[-1].add_child(new)
                 stack.append(new)
@@ -117,6 +117,16 @@ def parse_meta_json(_json: json) -> dict:
         
         
         return res, root
+
+
+def _get_table_of_contents(word_data: dict) -> list[str]:
+    if 'tableOfContentsV2' in word_data:
+        return [item['__ref'] for item in word_data['tableOfContentsV2']]
+
+    chap_list = []
+    for table_dict in word_data.get('tableOfContents', []):
+        chap_list += [*table_dict.values()]
+    return chap_list
     
 
 
@@ -136,6 +146,7 @@ class Works():
         self.catchphrase = self.res['catchphrase']
         self.introduction = self.res['introduction']
         self.tagLabels = self.res['tagLabels']
+        self.author = self.res['author']
 
         
     def get_raw_json(self) -> str:
@@ -154,11 +165,6 @@ class Works():
         
         soup = BeautifulSoup(response.text, 'html.parser')
         json_data = soup.find('script', id="__NEXT_DATA__")
-        author_text = soup.find('title').text
-        x = re.findall(r'(?<=（)(.+?)(?=\）)', author_text)
-        # print(x, author_text)
-        self.author = x[0]
-
         return json_data.text
 
     def get_content(self) -> chapter:

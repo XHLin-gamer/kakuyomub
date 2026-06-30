@@ -1,6 +1,3 @@
-from gevent import monkey
-monkey.patch_all()
-
 from .epub_maker import Epub_maker
 
 from .works import Works, chapter

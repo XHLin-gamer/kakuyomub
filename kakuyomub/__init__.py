@@ -1,1 +1,4 @@
-from .main import main as download
+def download(*args, **kwargs):
+    from .main import main
+
+    return main(*args, **kwargs)
