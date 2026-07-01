@@ -4,11 +4,16 @@
 </p>
 Usage:
 
+Make sure python is available, then
 ```bash
+git clone https://github.com/XHLin-gamer/kakuyomub.git
 pip install -r requirement.txt
-python -m kakuyomub.main WORK_ID
+python -m kakuyomub.main WORK_ID 
 ```
-or
+or if you want to point the downloaded file to a folder:
+```bash
+python -m kakuyomub.main WORK_ID --path C:\Users\xhaug\OneDrive\Desktop
+```
 
 ```bash
 pip install kakuyomub
