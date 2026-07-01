@@ -1,10 +1,10 @@
 from setuptools import setup, find_packages            #这个包没有的可以pip一下
 from pathlib import Path
 this_directory = Path(__file__).parent
-long_description = (this_directory / "README.md").read_text(encoding='utf-8')
+long_description = (this_directory / "readme.md").read_text(encoding='utf-8')
 setup(
     name = "kakuyomub",      #这里是pip项目发布的名称
-    version = "0.2.1",  #版本号，数值大的会优先被pip
+    version = "0.2.3",  #版本号，数值大的会优先被pip
     keywords = ("kakuyomu", "epub"),
     description = "Convert kakuyomu articles to one epub file",
     long_description = long_description,
