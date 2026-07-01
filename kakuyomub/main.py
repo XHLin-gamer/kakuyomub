@@ -42,4 +42,4 @@ def main(id,path = "./") -> None:
 if __name__ == "__main__":
     args = parser.parse_args()
     # print()
-    main(args.work_id)
+    main(args.work_id, args.path)
