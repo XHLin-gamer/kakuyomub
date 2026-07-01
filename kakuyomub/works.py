@@ -81,8 +81,9 @@ def parse_meta_json(_json: json) -> dict:
 
     # generate the chapter tree structure
     chap_list = _get_table_of_contents(word_data)
+    logger.info(f"chap_list: {chap_list}")
     
-    # if there is no chapter tree structure, hint the flat structure
+    # if there is no chapter tree structure, hint the flat structure, which is no chapter segmentation
     if chap_list == ['TableOfContentsChapter:']: 
         logger.info('flat structure')
         root = chapter(res['title'], work_id, data, 0, work_id, chap_list[0])
@@ -90,6 +91,14 @@ def parse_meta_json(_json: json) -> dict:
     else:
         root = chapter(res['title'],res['title'])
         stack = [root]
+        
+        # rare case for first chapter is flat, following chapters are tree structure, e.g. https://kakuyomu.jp/works/16817139554696751535
+        if chap_list[0] == 'TableOfContentsChapter:':
+            logger.info('first chapter is flat, following chapters are tree structure')
+            root = chapter(res['title'], work_id, data, 0, work_id, chap_list[0])
+            stack = [root]
+            chap_list = chap_list[1:]
+        
         
         # Build the content tree
         for idx, chap_id in enumerate(chap_list):
@@ -178,5 +187,11 @@ if __name__ == "__main__":
     work = Works(16818093076629589128)
     print(*work.get_content().get_episodes())
     
+    
+    # flat:2912051598397383103
+    
+    # semi flat: https://kakuyomu.jp/works/16817139554696751535
+    
+
     
     
