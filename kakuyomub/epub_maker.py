@@ -47,7 +47,11 @@ class Epub_maker():
         self.book.add_item(epub.EpubNav())
         
     def write_epub(self, path):
-        epub.write_epub(f'{path}/{self.title}.epub', self.book)
+        # if [] appear in the path, the epub file cannot be properly saved; Use pathlib to handle the path
+        file_name =self.title.replace(":","：").replace("/","_").replace("\\","_").replace("?","？").replace("*","_").replace("<","【").replace(">","】").replace("|","_")
+        path = f'{path}/{file_name}.epub'
+        print(f"writing epub to {path}")
+        epub.write_epub(path, self.book)
         
 if __name__ == '__main__':
     title = '生意気な後輩に人生を全否定されたので、腹いせに屋上から飛び降りたらどうなるか検証してみた。'
