@@ -1,5 +1,6 @@
 from ebooklib import epub
 import os
+from loguru import logger
 
 class Epub_maker():
     def __init__(self, identifier = '', title = '', author = '') -> None:
@@ -50,7 +51,7 @@ class Epub_maker():
         # if [] appear in the path, the epub file cannot be properly saved; Use pathlib to handle the path
         file_name =self.title.replace(":","：").replace("/","_").replace("\\","_").replace("?","？").replace("*","_").replace("<","【").replace(">","】").replace("|","_")
         path = f'{path}/{file_name}.epub'
-        print(f"writing epub to {path}")
+        logger.info(f"writing epub to {path}")
         epub.write_epub(path, self.book)
         
 if __name__ == '__main__':

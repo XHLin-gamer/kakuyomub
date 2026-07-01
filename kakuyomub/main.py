@@ -1,3 +1,9 @@
+import sys
+from loguru import logger
+
+logger.remove()
+logger.add(sys.stderr, level="INFO")
+
 from .epub_maker import Epub_maker
 
 from .works import Works, chapter
@@ -13,7 +19,7 @@ def main(id,path = "./") -> None:
 
     Args:
         id (str|int): the work id
-        path (str, optional): the target path. Defaults to None.
+        path (str, optional): the target path. Defaults to "./".
     """
     w = Works(id)
 
@@ -41,5 +47,4 @@ def main(id,path = "./") -> None:
         
 if __name__ == "__main__":
     args = parser.parse_args()
-    # print()
     main(args.work_id, args.path)

@@ -34,9 +34,10 @@ class chapter():
             episode_data = json[f"Episode:{episode_id}"]
             episode_title = episode_data['title']
             self.episodes.append(Episodes(self.work_id, episode_id, episode_title))
-            
+        
+        logger.info(f"Downloading: {self.title}")   
         self.downloader.download()
-        print(len(self.episodes))
+        
 
     def add_child(self, child):
         self.children.append(child)
@@ -81,11 +82,11 @@ def parse_meta_json(_json: json) -> dict:
 
     # generate the chapter tree structure
     chap_list = _get_table_of_contents(word_data)
-    logger.info(f"chap_list: {chap_list}")
+    logger.debug(f"chap_list: {chap_list}")
     
     # if there is no chapter tree structure, hint the flat structure, which is no chapter segmentation
     if chap_list == ['TableOfContentsChapter:']: 
-        logger.info('flat structure')
+        logger.debug('flat structure')
         root = chapter(res['title'], work_id, data, 0, work_id, chap_list[0])
         return res, root
     else:
@@ -94,7 +95,7 @@ def parse_meta_json(_json: json) -> dict:
         
         # rare case for first chapter is flat, following chapters are tree structure, e.g. https://kakuyomu.jp/works/16817139554696751535
         if chap_list[0] == 'TableOfContentsChapter:':
-            logger.info('first chapter is flat, following chapters are tree structure')
+            logger.debug('first chapter is flat, following chapters are tree structure')
             root = chapter(res['title'], work_id, data, 0, work_id, chap_list[0])
             stack = [root]
             chap_list = chap_list[1:]
