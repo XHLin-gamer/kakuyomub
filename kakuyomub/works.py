@@ -166,9 +166,9 @@ class Works():
         try:
             response = self.session.get(self._work_url)
             response.raise_for_status()
-            f = open('./test.html','w', encoding='utf8')
-            f.write(response.text)
-            f.close()
+            # f = open('./test.html','w', encoding='utf8')
+            # f.write(response.text)
+            # f.close()
         except Exception as e:
             logger.error(f"{e}")
             return None
